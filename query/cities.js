@@ -7,9 +7,7 @@ const City = require("../models/City");
 
 
 
-const abc = {
-    ab: ''
-}
+
 
 const cities = {
   type: new GraphQLList(CityForAdd),
