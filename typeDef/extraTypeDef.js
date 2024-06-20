@@ -1,3 +1,4 @@
+// const { TourSpotType } = require("./typeDef");
 const {
   GraphQLObjectType,
   GraphQLString,
@@ -8,7 +9,9 @@ const {
   GraphQLNonNull,
   GraphQLInputObjectType,
 } = require("graphql");
+
 const TourGuideContribution = require("../models/TourGuideContribution");
+const TourSpot = require("../models/TourSpot");
 
 const TourPlaceContributeInput = new GraphQLInputObjectType({
   name: "TourContributorInput",
@@ -38,6 +41,39 @@ const AdditionalInfoInput = new GraphQLInputObjectType({
   },
 });
 
+const TourSpotType = new GraphQLObjectType({
+  name: "TourSpotstype",
+  fields: () => ({
+    id: { type: GraphQLID },
+
+    name: { type: GraphQLString },
+
+    description: { type: GraphQLString },
+
+    photo: { type: GraphQLString },
+
+    cityId: { type: GraphQLID },
+
+    countryId: { type: GraphQLID },
+
+    divisionId: { type: GraphQLID },
+
+    perfectTourTime: { type: GraphQLString },
+
+    howToGoThere: { type: GraphQLString },
+
+    howToStayThere: { type: GraphQLString },
+
+    howDoHere: { type: GraphQLString },
+
+    whereToEat: { type: GraphQLString },
+
+    tourTipsGuide: { type: GraphQLString },
+
+    topTourPlace: { type: GraphQLString },
+  }),
+});
+
 const TourPlaceContributeType = new GraphQLObjectType({
   name: "TourContributorType",
   fields: () => ({
@@ -49,15 +85,22 @@ const TourPlaceContributeType = new GraphQLObjectType({
 });
 
 const TourGuideContributionType = new GraphQLObjectType({
-  name: "TourGuideContribution",
+  name: "TourGuideContributions",
   fields: () => ({
     id: { type: GraphQLID },
     tourPlaceId: { type: GraphQLID },
     clientProfileID: { type: GraphQLID },
     title: { type: GraphQLString },
+    about: { type: GraphQLString },
     price: { type: GraphQLInt },
     contribute: {
       type: new GraphQLList(TourPlaceContributeType),
+    },
+    info: {
+      type: TourSpotType,
+      resolve: async (parent, args) => {
+        return await TourSpot.findOne({ _id: parent?.tourPlaceId });
+      },
     },
   }),
 });
@@ -107,7 +150,6 @@ const TourGuideContributionDetailType = new GraphQLObjectType({
 const PersonPicInputType = new GraphQLInputObjectType({
   name: "PersonPicInputType",
   fields: {
-    
     adult: { type: GraphQLInt },
     children: { type: GraphQLInt },
     infant: { type: GraphQLInt },
@@ -128,7 +170,7 @@ const PersonPicType = new GraphQLObjectType({
 const StartTimeType = new GraphQLObjectType({
   name: "StartTimeTypeF",
   fields: {
-    id: {type: GraphQLID},
+    id: { type: GraphQLID },
     timePic: { type: GraphQLString },
   },
 });
@@ -144,7 +186,6 @@ const TourGuideReserveType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
 
-    
     clientProfileID: { type: GraphQLID },
 
     guideContribution: { type: GraphQLID },
@@ -181,7 +222,6 @@ const TourGuideReserveType = new GraphQLObjectType({
       resolve: async (parent, args) => {
         console.log(parent.clientProfileID);
         try {
-
           const contribute = await TourGuideContribution.find({
             clientProfileID: parent.clientProfileID,
           });
@@ -193,10 +233,10 @@ const TourGuideReserveType = new GraphQLObjectType({
           console.log(findUnique);
           return findUnique;
         } catch (error) {
-          throw new Error(error.message)
+          throw new Error(error.message);
         }
-      }
-    }
+      },
+    },
   }),
 });
 
@@ -213,4 +253,3 @@ module.exports = {
   PersonPicType,
   StartTimeType,
 };
-

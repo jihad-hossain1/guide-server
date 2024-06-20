@@ -423,17 +423,17 @@ const TourGuideProfile = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     description: { type: GraphQLString },
+    about: { type: GraphQLString },
     uptoPeople: { type: GraphQLString },
     cityId: { type: GraphQLID },
     responseTime: { type: GraphQLString },
     languages: { type: GraphQLList(GraphQLString) },
     profileImage: { type: GraphQLString },
     type: { type: GraphQLString },
-    countryId: {type: GraphQLID },
+    countryId: { type: GraphQLID },
     clientId: { type: GraphQLID },
-    
-  })
-})
+  }),
+});
 
 const TourGuideType = new GraphQLObjectType({
   name: "TourGuide",

@@ -48,19 +48,6 @@ const TourGuideSchema = new mongoose.Schema(
         ref: "TourGuideContribution",
       },
     ],
-    // tours: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "TourSpot",
-    //   },
-    // ],
-
-    // replies: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Review",
-    //   },
-    // ],
   },
   { timestamps: true }
 );

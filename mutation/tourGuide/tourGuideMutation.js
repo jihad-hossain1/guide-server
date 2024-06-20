@@ -92,8 +92,8 @@ const addTourGuideProfile = {
 
     try {
       validateFieldMaxLength(description, "Description", 20, 1500);
-       validateFieldMaxLength(args.about, "about", 20, 300);
-      validateFieldMaxLength(args.type, "Type", 5, 30);
+      validateFieldMaxLength(about, "about", 20, 300);
+      validateFieldMaxLength(type, "Type", 5, 30);
       // validateUptoNumber(uptoPeople, "Upto People", 1, 20);
       validateUptoNumber(Number(responseTime), "Response Time", 1, 10);
       fieldValidate(countryId, "Country Name");
@@ -182,11 +182,11 @@ const updateTourGuideProfile = {
   },
   resolve: async (parent, args) => {
     try {
-      validateFieldMaxLength(args.description, "Description", 20, 1500);
-      validateFieldMaxLength(args.about, "about", 20, 300);
-      validateFieldMaxLength(args.type, "Type", 5, 30);
-      // validateUptoNumber(args.uptoPeople, "Upto People", 1, 20);
-      validateUptoNumber(Number(args.responseTime), "Response Time", 1, 10);
+      // validateFieldMaxLength(args.description, "Description", 20, 1500);
+      // validateFieldMaxLength(args.about, "about", 20, 300);
+      // validateFieldMaxLength(args.type, "Type", 5, 30);
+      // // validateUptoNumber(args.uptoPeople, "Upto People", 1, 20);
+      // validateUptoNumber(Number(args.responseTime), "Response Time", 1, 10);
 
       const updateGuide = await TourGuide.findByIdAndUpdate(
         args.id,
@@ -222,6 +222,7 @@ const addGuideTourplace = {
     tourPlaceId: { type: GraphQLID },
     clientProfileID: { type: GraphQLID },
     title: { type: GraphQLString },
+    about: { type: GraphQLString },
     price: { type: GraphQLInt },
     contribute: { type: GraphQLList(TourPlaceContributeInput) },
   },
@@ -270,6 +271,7 @@ const updateTourGuidePlce = {
   args: {
     id: { type: GraphQLID },
     title: { type: GraphQLString },
+    about: { type: GraphQLString },
     price: { type: GraphQLInt },
     tourPlaceId: { type: GraphQLID },
     clientProfileID: { type: GraphQLID },
@@ -301,6 +303,7 @@ const updateTourGuidePlce = {
         {
           $set: {
             title: args.title || undefined,
+            about: args.about || undefined,
             price: +args.price || undefined,
             tourPlaceId: args.tourPlaceId || undefined,
             clientProfileID: args.clientProfileID || undefined,
