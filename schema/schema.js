@@ -80,6 +80,7 @@ const {
   updateGuideReserve,
   addProfileImage,
 } = require("../mutation/tourGuide/tourGuideMutation");
+const { addContinent } = require("../mutation/continet");
 
 //main query
 const RootQuery = new GraphQLObjectType({
@@ -192,6 +193,8 @@ const RootMutation = new GraphQLObjectType({
     updateTourGuidePlce,
     updateGuideReserve,
     addProfileImage,
+    // continet
+    addContinent
   },
 });
 
