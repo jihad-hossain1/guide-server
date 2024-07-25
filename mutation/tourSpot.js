@@ -13,7 +13,14 @@ const Review = require("../models/Review");
 const { validateFieldMaxLength } = require("../helpers/validateField");
 
 
-
+function generateSlug(title) {
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')  // Replace spaces with hyphens
+      .replace(/[^\w\-]+/g, '')  // Remove non-word characters
+      .replace(/\-\-+/g, '-');  // Replace multiple hyphens with a single hyphen
+  }
 
 
 const addTourSpot = {
@@ -39,10 +46,9 @@ const addTourSpot = {
             validateFieldMaxLength(divisionId, "Division Name", 2, 30)
             validateFieldMaxLength(cityId, "City Name", 2, 30)
 
-            const modSlug = slug?.toLowerCase().trim()
+            const modSlug = generateSlug(slug)
 
             const findSlug = await TourSpot.findOne({slug: modSlug});
-            console.log("🚀 ~ resolve: ~ findSlug:", findSlug)
 
             if (findSlug) {
                 throw new Error("Slug Already Exist , try another one");
@@ -115,7 +121,7 @@ const updateTourspot = {
         const { name, description, photo, cityId, countryId, divisionId, slug } = args
         
         try {
-            const modSlug = slug.toLowerCase().trim()
+            const modSlug = generateSlug(slug)
 
             if (!args?.id || args?.id == '') {
             throw new Error("TourSpot Id is required")
