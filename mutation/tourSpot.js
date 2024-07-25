@@ -20,6 +20,7 @@ const addTourSpot = {
     type: TourSpotType,
     args: {
         name: { type: GraphQLString },
+        slug: { type: GraphQLString },
         description: { type: GraphQLString },
         photo: { type: GraphQLString },
         cityId: { type: GraphQLID },
@@ -27,15 +28,25 @@ const addTourSpot = {
         divisionId: { type: GraphQLID },
     },
     resolve: async (parent, args) => {
-        const { name, description, photo, cityId, countryId, divisionId } = args
+        const { name, description, photo, cityId, countryId, divisionId ,slug} = args
         
         try {
             // console.log(args);
             validateFieldMaxLength(name, "TourSpot Name", 5, 100)
+            validateFieldMaxLength(slug, "Slug", 5, 100)
             validateFieldMaxLength(description, "TourSpot Description", 20, 5000)
             validateFieldMaxLength(countryId, "Country Name", 2, 30)
             validateFieldMaxLength(divisionId, "Division Name", 2, 30)
             validateFieldMaxLength(cityId, "City Name", 2, 30)
+
+            const modSlug = slug?.toLowerCase().trim()
+
+            const findSlug = await TourSpot.findOne({slug: modSlug});
+            console.log("🚀 ~ resolve: ~ findSlug:", findSlug)
+
+            if (findSlug) {
+                throw new Error("Slug Already Exist , try another one");
+            }
 
             const tourSpotExists = await TourSpot.findOne({ name: name.trim() });
 
@@ -49,7 +60,8 @@ const addTourSpot = {
                 photo: photo,
                 cityId: cityId,
                 countryId: countryId,
-                divisionId: divisionId
+                divisionId: divisionId,
+                slug: modSlug
             });
 
             const result = await tourSpot.save();
@@ -91,6 +103,7 @@ const updateTourspot = {
     args: {
         id: { type: GraphQLID },
         name: { type: GraphQLString },
+        slug: { type: GraphQLString },
         description: { type: GraphQLString },
         photo: { type: GraphQLString },
         cityId: { type: GraphQLID },
@@ -99,9 +112,10 @@ const updateTourspot = {
     },
 
     resolve: async (parent, args) => {
-        const { name, description, photo, cityId, countryId, divisionId } = args
+        const { name, description, photo, cityId, countryId, divisionId, slug } = args
         
         try {
+            const modSlug = slug.toLowerCase().trim()
 
             if (!args?.id || args?.id == '') {
             throw new Error("TourSpot Id is required")
@@ -117,6 +131,7 @@ const updateTourspot = {
                         cityId: cityId || undefined,
                         countryId: countryId || undefined,
                         divisionId: divisionId || undefined,
+                        slug: modSlug || undefined,
                     },
             
                 }, 

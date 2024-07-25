@@ -8,6 +8,12 @@ const TourSpotSchema = new mongoose.Schema(
       max: 100,
       min: 5,
     },
+    slug: {
+      type: String,
+      required: true,
+      max: 100,
+      min: 5,
+    },
 
     description: {
       type: String,

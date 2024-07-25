@@ -18,7 +18,8 @@ const {
   singleTourspotDetails,
   tourSpots,
   relatedTourSpots,
-  tourSpotsByCountryId
+  tourSpotsByCountryId,
+  tourSpotsPagination
 } = require("../query/tourspots");
 const { reviesByTourSpot, newReviews } = require("../query/reviews");
 const {
@@ -114,6 +115,7 @@ const RootQuery = new GraphQLObjectType({
     tourSpots,
     relatedTourSpots,
     tourSpotsByCountryId,
+    tourSpotsPagination,
     // cities
     cities,
     cityByDivision,

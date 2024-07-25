@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const TourSpot = require("../models/TourSpot");
 const { TourSpotType } = require("../typeDef/typeDef");
-const { GraphQLID, GraphQLList } = require("graphql");
+const { GraphQLID, GraphQLList, GraphQLInt, GraphQLString, GraphQLNonNull } = require("graphql");
 
 const singleCountryTourspotList = {
   type: new GraphQLList(TourSpotType),
@@ -18,6 +18,30 @@ const tourSpots = {
   resolve: async () => {
     try {
       return await TourSpot.find();
+    } catch (error) {
+      throw new Error(`Error fetching TourSpot: ${error}`);
+    }
+  },
+};
+
+const tourSpotsPagination = {
+  type: new GraphQLList(TourSpotType),
+  args: {
+    search: { type: GraphQLString },
+    page: { type: GraphQLInt },
+    limit: { type: GraphQLInt },
+  },
+  resolve: async (parent, args) => {
+    const { search, page, limit } = args;
+   
+    const query = search ? { name: { $regex: search, $options: "i" } } : {};
+    const pageNumber = page || 1;
+    const pageSize = limit || 10;
+    const skip = (pageNumber - 1) * pageSize;
+
+    try {
+      const results = await TourSpot.find(query).skip(skip).limit(pageSize);
+      return results;
     } catch (error) {
       throw new Error(`Error fetching TourSpot: ${error}`);
     }
@@ -48,10 +72,10 @@ const singleTourspot = {
 
 const singleTourspotDetails = {
   type: TourSpotType,
-  args: { id: { type: GraphQLID } },
+  args: { slug: { type: GraphQLNonNull(GraphQLString) } },
   resolve: async (parent, args) => {
     try {
-      const fetchData = await TourSpot.findById(args?.id);
+      const fetchData = await TourSpot.findOne({slug: args?.slug});
       return fetchData;
     } catch (error) {
       console.log(error);
@@ -93,5 +117,6 @@ module.exports = {
   singleTourspotDetails,
   tourSpots,
   relatedTourSpots,
-  tourSpotsByCountryId
+  tourSpotsByCountryId,
+  tourSpotsPagination
 };

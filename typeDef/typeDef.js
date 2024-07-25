@@ -128,6 +128,8 @@ const TourSpotType = new GraphQLObjectType({
 
     name: { type: GraphQLString },
 
+    slug: {type: GraphQLString},
+
     description: { type: GraphQLString },
 
     photo: { type: GraphQLString },
