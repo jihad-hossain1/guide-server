@@ -215,6 +215,7 @@ const CityForAdd = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
+    slug: { type: GraphQLString },
     description: { type: GraphQLString },
     photo: { type: GraphQLString },
     divisionId: { type: GraphQLID },
@@ -442,6 +443,7 @@ const TourGuideType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     description: { type: GraphQLString },
+    slug: { type: GraphQLString },
     about: { type: GraphQLString },
     uptoPeople: { type: GraphQLString },
     cityId: { type: GraphQLID },

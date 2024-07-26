@@ -1,10 +1,8 @@
-const {
-  GraphQLID,
-  GraphQLString,
-} = require("graphql");
+const { GraphQLID, GraphQLString } = require("graphql");
 
 const { CityForAdd } = require("../typeDef/typeDef");
 const City = require("../models/City");
+const { modText, modSlug } = require("../helpers/modText");
 
 
 const addCity = {
@@ -17,12 +15,24 @@ const addCity = {
     countryId: { type: GraphQLID },
   },
   resolve: async (parent, args) => {
+    const { name, description, photo, divisionId, countryId } = args;
     try {
-      const alreadyName = await City.findOne({ name: args?.name });
-      if (alreadyName?.name == args?.name) {
+      const modtext = modText(name);
+
+      const slug = await modSlug(name,City);
+
+      const alreadyName = await City.findOne({ name: modtext });
+      if (alreadyName) {
         return new Error("city Already Exist , try another one");
       }
-      const city = new City(args);
+      const city = new City({
+        name: modtext,
+        description,
+        photo,
+        divisionId,
+        countryId,
+        slug,
+      });
       return await city.save();
     } catch (error) {
       throw new Error("Error adding city");
@@ -42,24 +52,22 @@ const updateCity = {
   },
   resolve: async (parent, args) => {
     try {
-      const city = await City.findByIdAndUpdate(args.id, {
-        name: args.name || undefined,
-        description: args.description || undefined,
-        photo: args.photo || undefined,
-        divisionId: args.divisionId || undefined,
-        countryId: args.countryId || undefined,
-      }, { new: true });
+      const city = await City.findByIdAndUpdate(
+        args.id,
+        {
+          name: args.name || undefined,
+          description: args.description || undefined,
+          photo: args.photo || undefined,
+          divisionId: args.divisionId || undefined,
+          countryId: args.countryId || undefined,
+        },
+        { new: true },
+      );
       return city;
     } catch (error) {
       throw new Error("Error updating city");
     }
-  }
-}
+  },
+};
 
-
-
-
-
-
-
-module.exports = { addCity,updateCity };
+module.exports = { addCity, updateCity };

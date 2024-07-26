@@ -3,8 +3,14 @@ const mongoose = require("mongoose");
 const ContinentSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Name are required"],
-    max: [30, "max character 30"],
+    required: true,
+    max: 100,
+    min: 2,
+  },
+  slug: {
+    type: String,
+    max: 100,
+    min: 2,
   },
   code: { 
     type: String, 

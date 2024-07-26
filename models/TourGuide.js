@@ -12,6 +12,11 @@ const TourGuideSchema = new mongoose.Schema(
       max: 300,
       min: 20,
     },
+    slug: {
+      type: String,
+      max: 100,
+      min: 2,
+    },
     importenNotice: {
       type: String,
     },

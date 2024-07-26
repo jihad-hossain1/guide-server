@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
-
+const bcrypt = require("bcrypt");
 
 const AddressType = new mongoose.Schema({
   city: {
@@ -23,6 +22,12 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    max: 100,
+  },
+  slug: {
+    type: String,
+    max: 100,
+    min: 2,
   },
   phone: {
     type: String,
@@ -66,7 +71,5 @@ ClientSchema.pre("save", async function (next) {
   }
   next();
 });
-
-
 
 module.exports = mongoose.model("Client", ClientSchema);

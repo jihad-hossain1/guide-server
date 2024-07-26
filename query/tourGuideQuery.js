@@ -1,4 +1,4 @@
-const { GraphQLID, GraphQLNonNull, GraphQLList} = require("graphql");
+const { GraphQLID, GraphQLNonNull, GraphQLList, GraphQLString} = require("graphql");
 const { TourGuideType, ImageType, TourGuideProfile } = require("../typeDef/typeDef");
 const TourGuide = require("../models/TourGuide");
 const TourGuideContribution = require("../models/TourGuideContribution");
@@ -28,13 +28,13 @@ const getTourGuides = {
 const getTourGuide = {
   type: TourGuideType,
   args: {
-    id: {
-      type: GraphQLID,
+    slug: {
+      type: GraphQLString,
     },
   },
   resolve: async (_, args) => {
     try {
-      const tourGuide = await TourGuide.findById(args.id);
+      const tourGuide = await TourGuide.findOne({slug: args.slug});
 
       if (!tourGuide) {
         throw new Error("TourGuide not found");

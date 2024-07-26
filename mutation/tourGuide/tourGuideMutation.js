@@ -40,6 +40,7 @@ const {
   fieldValidate,
   validateUptoNumber,
 } = require("../../helpers/validateField");
+const Client = require("../../models/Client");
 
 const addProfileImage = {
   type: TourGuideProfile,
@@ -91,8 +92,8 @@ const addTourGuideProfile = {
     } = args;
 
     try {
-      validateFieldMaxLength(description, "Description", 20, 1500);
-      validateFieldMaxLength(about, "about", 20, 300);
+      validateFieldMaxLength(description, "Description", 5, 1500);
+      validateFieldMaxLength(about, "about", 5, 300);
       validateFieldMaxLength(type, "Type", 5, 30);
       // validateUptoNumber(uptoPeople, "Upto People", 1, 20);
       validateUptoNumber(Number(responseTime), "Response Time", 1, 10);
@@ -106,6 +107,8 @@ const addTourGuideProfile = {
         throw new Error("Your Profile Already Exist, Update your data");
       }
 
+      const findClient = await Client.findById(clientId)
+
       const tourGuideProfile = new TourGuide({
         description,
         // uptoPeople,
@@ -117,6 +120,7 @@ const addTourGuideProfile = {
         type,
         countryId,
         about,
+        slug: findClient.slug
       });
 
       const saved = await tourGuideProfile.save();
