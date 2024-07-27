@@ -125,35 +125,14 @@ const TourSpotType = new GraphQLObjectType({
   name: "TourSpot",
   fields: () => ({
     id: { type: GraphQLID },
-
     name: { type: GraphQLString },
-
     slug: {type: GraphQLString},
-
     description: { type: GraphQLString },
-
     photo: { type: GraphQLString },
-
     cityId: { type: GraphQLID },
-
     countryId: { type: GraphQLID },
-
     divisionId: { type: GraphQLID },
-
-    perfectTourTime: { type: GraphQLString },
-
-    howToGoThere: { type: GraphQLString },
-
-    howToStayThere: { type: GraphQLString },
-
-    howDoHere: { type: GraphQLString },
-
-    whereToEat: { type: GraphQLString },
-
-    tourTipsGuide: { type: GraphQLString },
-
-    topTourPlace: { type: GraphQLString },
-
+    code: { type: GraphQLString },
     city: {
       type: CityForAdd,
       resolve: async (parent, args) => {
@@ -166,9 +145,6 @@ const TourSpotType = new GraphQLObjectType({
         }
       },
     },
-
-    code: { type: GraphQLString },
-
     country: {
       type: CountryType,
       resolve: async (parent, args) => {
@@ -181,7 +157,6 @@ const TourSpotType = new GraphQLObjectType({
         }
       },
     },
-
     reviews: {
       type: new GraphQLList(ReviewType),
       resolve(parent, args) {
