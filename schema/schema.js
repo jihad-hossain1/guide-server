@@ -10,6 +10,7 @@ const {
   cityByDivision,
   getCity,
   getCityByCountry,
+  getCityWithTourSpots,
 } = require("../query/cities");
 const { divisionByCountry, divisions,division } = require("../query/divisions");
 const {
@@ -121,6 +122,7 @@ const RootQuery = new GraphQLObjectType({
     cityByDivision,
     getCity,
     getCityByCountry,
+    getCityWithTourSpots,
     // divisions
     divisionByCountry,
     divisions,

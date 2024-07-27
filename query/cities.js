@@ -1,6 +1,7 @@
 
 const {
-  GraphQLID,GraphQLList
+  GraphQLID,GraphQLList,
+  GraphQLString
 } = require("graphql");
 const { CityForAdd, CityType } = require("../typeDef/typeDef");
 const City = require("../models/City");
@@ -32,6 +33,25 @@ const getCity = {
     }
   },
 };
+
+
+const getCityWithTourSpots = {
+  type: CityForAdd,
+  args: { slug: { type: GraphQLString } },
+  resolve: async (parent, args) => {
+    try {
+      const city = await City.findOne({slug:args?.slug});
+
+      if(!city){
+        return new Error("city not found");
+      }
+
+      return city;
+    } catch (error) {
+      return new Error(`Error fetching City: ${error}`);
+    }
+  },
+};
 const getCityByCountry = {
   type: new GraphQLList(CityForAdd),
   args: { id: { type: GraphQLID } },
@@ -56,4 +76,4 @@ const cityByDivision = {
   },
 };
 
-module.exports = { cities, cityByDivision, getCity, getCityByCountry };
+module.exports = { cities, cityByDivision, getCity, getCityByCountry,getCityWithTourSpots };

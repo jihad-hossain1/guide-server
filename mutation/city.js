@@ -52,6 +52,8 @@ const updateCity = {
   },
   resolve: async (parent, args) => {
     try {
+      const slug = await modSlug(args.name,City);
+
       const city = await City.findByIdAndUpdate(
         args.id,
         {
@@ -60,6 +62,7 @@ const updateCity = {
           photo: args.photo || undefined,
           divisionId: args.divisionId || undefined,
           countryId: args.countryId || undefined,
+          slug: slug || undefined,
         },
         { new: true },
       );
