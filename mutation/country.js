@@ -2,6 +2,7 @@ const { GraphQLID, GraphQLString } = require("graphql");
 const Country = require("../models/Country");
 const { CountryType } = require("../typeDef/typeDef");
 const mongoose = require("mongoose");
+const { modText, modSlug } = require("../helpers/modText");
 
 const addCountry = {
   type: CountryType,
@@ -14,11 +15,22 @@ const addCountry = {
   resolve: async (parent, args) => {
     try {
       const alreadyName = await Country.findOne({ name: args?.name });
+
+      const modtext = modText(name);
+
+      const slug = await modSlug(name,City);
       if (alreadyName) {
         return new Error("Country Already Exist , try another one");
       }
-      const country = new Country(args);
-      return await country.save();
+      const country = new Country({
+        name: modtext,
+        description: args?.description,
+        photo: args?.photo,
+        continentId: args?.continentId,
+        slug,
+      });
+      const saved = await country.save();
+      return saved;
     } catch (error) {
       return new Error("Error adding country");
     }

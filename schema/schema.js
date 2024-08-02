@@ -4,7 +4,7 @@ const { projects, project, clientProjects } = require("../query/projects");
 const { user, users } = require("../query/users");
 const { destination, destinations } = require("../query/destinations");
 const { singleContinent, continents } = require("../query/continents");
-const { countries, singleCountry, country } = require("../query/countries");
+const { countries, singleCountry, country, country_by_slug } = require("../query/countries");
 const {
   cities,
   cityByDivision,
@@ -109,6 +109,7 @@ const RootQuery = new GraphQLObjectType({
     countries,
     singleCountry,
     country,
+    country_by_slug,
     // tourspot
     singleCountryTourspotList,
     singleTourspot,

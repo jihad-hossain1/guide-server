@@ -137,23 +137,32 @@ const TourSpotType = new GraphQLObjectType({
       type: CityForAdd,
       resolve: async (parent, args) => {
         try {
-          let _i = await City.find();
-          let result = _i?.find((item) => item?.id == parent.cityId);
-          return result;
+          let _i = await City.findOne({_id: parent?.cityId})
+          return _i;
         } catch (error) {
           throw new Error("Error fetching city name");
         }
       },
     },
+    division: {
+      type: DivisionType,
+      resolve: async(parent,args)=>{
+        try {
+          const findDivision = Division.findOne({_id: parent?.divisionId});
+          return findDivision;
+        } catch (error) {
+          console.error(error?.message);
+        }
+      }
+    } ,
     country: {
       type: CountryType,
       resolve: async (parent, args) => {
         try {
-          let _i = await Country.find();
-          let result = _i?.find((item) => item?.id == parent.countryId);
-          return result;
+          let _i = await Country.findOne({_id: parent?.countryId});
+          return _i;
         } catch (error) {
-          throw new Error("Error fetching country name");
+          console.error(error?.message);
         }
       },
     },
@@ -248,6 +257,7 @@ const CountryType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
+    slug: { type: GraphQLString },
     description: { type: GraphQLString },
     photo: { type: GraphQLString },
     continentId: { type: GraphQLID },
@@ -255,9 +265,9 @@ const CountryType = new GraphQLObjectType({
     touristSpots: {
       type: new GraphQLList(TourSpotType),
       resolve: async (parent, args) => {
-        let tourt = await TourSpot.find();
-        let result = tourt?.filter((item) => item?.countryId === parent.id);
-        return result;
+        let tourts = await TourSpot.find({countryId: parent.id});
+        // let result = tourt?.filter((item) => item?.countryId === parent.id);
+        return tourts;
       },
     },
     division: {

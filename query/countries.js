@@ -2,7 +2,8 @@ const { default: mongoose } = require("mongoose");
 const Country = require("../models/Country");
 const { CountryType } = require("../typeDef/typeDef");
 const {
-  GraphQLID,GraphQLList
+  GraphQLID,GraphQLList,
+  GraphQLString
 } = require("graphql");
 
 
@@ -53,7 +54,26 @@ const country = {
     }
   },
 };
+const country_by_slug = {
+  type: CountryType,
+   args: { slug: { type: GraphQLString } },
+  resolve: async (parent, {slug}) => {
+    try {
+     
+
+      const country = await Country.findOne({ slug: slug });
+      // console.log(countries.reverse());
+
+      if (!country) {
+        throw new Error("Country not found");
+      }
+      return country
+    } catch (error) {
+      throw new Error(`Error fetching country: ${error}`);
+    }
+  },
+};
 
 
 
-module.exports = { countries, singleCountry ,country};
+module.exports = { countries, singleCountry ,country ,country_by_slug};

@@ -1,5 +1,5 @@
 function modText(text) {
-  return text.toLowerCase().trim();
+  return text?.toLowerCase()?.trim();
 }
 
 async function modSlug(text, Model) {
